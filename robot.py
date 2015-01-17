@@ -24,7 +24,6 @@ class Robot(wpilib.IterativeRobot):
 
     def autonomousInit(self):
         print("-- AUTONOMOUS --")
-        self.counter = 0
 
     def autonomousPeriodic(self):
         pass
