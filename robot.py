@@ -7,11 +7,11 @@ class Robot(wpilib.IterativeRobot):
     def robotInit(self):
 
         # Motors to PWM channels
-        fl_motor = wpilib.Talon(0) # Channel 0
-        bl_motor = wpilib.Talon(1) # Channel 1
+        l_motor = wpilib.Talon(0) # Channel 0
+        r_motor = wpilib.Talon(1) # Channel 1
 
         # Drivetrain control
-        self.robot_drive = wpilib.RobotDrive(bl_motor, fl_motor)
+        self.robot_drive = wpilib.RobotDrive(r_motor, l_motor)
 
         # Joystick
         self.joystick = wpilib.Joystick(0)
