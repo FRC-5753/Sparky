@@ -1,38 +1,44 @@
 #!/usr/bin/env python3
 
-import wpilib
+import wpilib as w
 
-class Robot(wpilib.IterativeRobot):
+class Sparky(w.IterativeRobot):
 
     def robotInit(self):
 
         # Motors to PWM channels
-        l_motor = wpilib.Talon(0) # Channel 0
-        r_motor = wpilib.Talon(1) # Channel 1
+        l_motor = w.Talon(0)
+        r_motor = w.Talon(1)
 
         # Drivetrain control
-        self.robot_drive = wpilib.RobotDrive(r_motor, l_motor)
+        self.drivetrain = w.RobotDrive(r_motor, l_motor)
 
         # Joystick
-        self.joystick = wpilib.Joystick(0)
+        self.joystick = w.Joystick(0)
+
+    def move(self, speed, curve):
+        self.drivetrain.drive(speed, curve)
+
+    def stop(self):
+        self.drivetrain.drive(0, 0)
 
     def disabledInit(self):
-        print("-- DISABLED --")
+        pass
 
     def disabledPeriodic(self):
-        self.robot_drive.drive(0, 0) # Stop the robot
+        self.stop() # Stop the robot
 
     def autonomousInit(self):
-        print("-- AUTONOMOUS --")
+        pass
 
     def autonomousPeriodic(self):
         pass
 
     def teleopInit(self):
-        print("-- TELEOP --")
+        pass
 
     def teleopPeriodic(self):
-        self.robot_drive.arcadeDrive(self.joystick)
+        pass
 
 if __name__ == "__main__":
-    wpilib.run(Robot)
+    w.run(Sparky)
