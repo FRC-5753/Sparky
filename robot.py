@@ -10,7 +10,7 @@ class Sparky(w.IterativeRobot):
         # Motors to PWM channels
         l_motor = w.Talon(0)
         r_motor = w.Talon(1)
-        self.lift_motor = w.Talon(2)
+        self.lift_motor = w.VictorSP(2)
 
         # Limit switches
         self.top_ls = w.DigitalInput(0)
@@ -66,23 +66,22 @@ class Sparky(w.IterativeRobot):
         self.down = True
 
     def teleopPeriodic(self):
-        while self.isOperatorControl() and self.isEnabled():
-            self.drivetrain.arcadeDrive(self.js0, squaredInputs=True)
+        self.drivetrain.arcadeDrive(self.js0, squaredInputs=True)
 
-            if self.top_ls.get() == 1:
-                self.up = False
-            elif self.bot_ls.get() == 1:
-                self.down = False
-            else:
-                self.up = True
-                self.down = True
+        if self.top_ls.get() == 1:
+            self.up = False
+        elif self.bot_ls.get() == 1:
+            self.down = False
+        else:
+            self.up = True
+            self.down = True
 
-            if self.js0.getRawButton(1) and self.up:
-                self.lift_motor.set(1)
-            elif self.js0.getRawButton(2) and self.down:
-                self.lift_motor.set(-1)
-            else:
-                self.lift_motor.set(0)
+        if self.js0.getRawButton(1) and self.up: # Button B
+            self.lift_motor.set(0.3)
+        elif self.js0.getRawButton(2) and self.down: # Button A
+            self.lift_motor.set(-0.3)
+        else:
+            self.lift_motor.set(0)
 
 if __name__ == "__main__":
     w.run(Sparky)
