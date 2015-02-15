@@ -12,12 +12,10 @@ class Sparky(w.IterativeRobot):
         r_motor = w.Talon(1)
         self.lift_motor = w.VictorSP(2)
 
-        # Limit switches
-        self.top_ls = w.DigitalInput(0)
-        self.bot_ls = w.DigitalInput(1)
-
         # Drivetrain control
         self.drivetrain = w.RobotDrive(l_motor, r_motor)
+        self.drivetrain.kDefaultSensitivity = 0.25
+        self.drivetrain.setSensitivity(0.25)
 
         # Joystick
         self.js0 = w.Joystick(0) # Xbox controller
@@ -37,7 +35,7 @@ class Sparky(w.IterativeRobot):
         self.moving = True
         self.i = 0
 
-        self.length = 100 # How long the robot will run at max speed (100 ~= 2 sec)
+        self.length = 145 # How long the robot will run at max speed (100 ~= 2 sec)
         self.max_speed = 5 # Maximum speed (1-10)
 
     def autonomousPeriodic(self):
@@ -62,26 +60,18 @@ class Sparky(w.IterativeRobot):
             self.move(0, 0)
 
     def teleopInit(self):
-        self.up = True
-        self.down = True
+        pass
 
     def teleopPeriodic(self):
-        self.drivetrain.arcadeDrive(self.js0, squaredInputs=True)
+        while self.isOperatorControl() and self.isEnabled():
+            self.drivetrain.arcadeDrive(self.js0, squaredInputs=True)
 
-        if self.top_ls.get() == 1:
-            self.up = False
-        elif self.bot_ls.get() == 1:
-            self.down = False
-        else:
-            self.up = True
-            self.down = True
-
-        if self.js0.getRawButton(1) and self.up: # Button B
-            self.lift_motor.set(0.3)
-        elif self.js0.getRawButton(2) and self.down: # Button A
-            self.lift_motor.set(-0.3)
-        else:
-            self.lift_motor.set(0)
+            if self.js1.getRawButton(3):
+                self.lift_motor.set(-0.8)
+            elif self.js1.getRawButton(4):
+                self.lift_motor.set(0.6)
+            else:
+                self.lift_motor.set(0)
 
 if __name__ == "__main__":
     w.run(Sparky)
