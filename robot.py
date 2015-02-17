@@ -14,15 +14,10 @@ class Sparky(w.IterativeRobot):
 
         # Drivetrain control
         self.drivetrain = w.RobotDrive(l_motor, r_motor)
-        self.drivetrain.kDefaultSensitivity = 0.25
-        self.drivetrain.setSensitivity(0.25)
 
         # Joystick
         self.js0 = w.Joystick(0) # Xbox controller
         self.js1 = w.Joystick(1) # Joystick
-
-        # Disable motor safety
-        self.drivetrain.setSafetyEnabled(False)
 
     def disabledInit(self):
         pass
@@ -41,13 +36,13 @@ class Sparky(w.IterativeRobot):
     def autonomousPeriodic(self):
         while self.moving:
             for x in range(self.max_speed):
-                self.move(-x/10, -0.08)
+                self.move(-x/10, -0.07)
                 sleep(0.1)
                 if x == (self.max_speed - 1):
                     self.moving = False
 
         if self.i < self.length:
-            self.move(-self.max_speed/10, -0.08)
+            self.move(-self.max_speed/10, -0.07)
             self.i += 1
         elif self.i == self.length:
             for x in reversed(range(self.max_speed - 1)):
@@ -64,11 +59,11 @@ class Sparky(w.IterativeRobot):
 
     def teleopPeriodic(self):
         while self.isOperatorControl() and self.isEnabled():
-            self.drivetrain.arcadeDrive(self.js0, squaredInputs=True)
+            self.drivetrain.arcadeDrive(self.js0)
 
-            if self.js1.getRawButton(3):
+            if self.js1.getRawButton(3) or self.js0.getRawButton(2):
                 self.lift_motor.set(-0.8)
-            elif self.js1.getRawButton(4):
+            elif self.js1.getRawButton(4) or self.js0.getRawButton(1):
                 self.lift_motor.set(0.6)
             else:
                 self.lift_motor.set(0)
